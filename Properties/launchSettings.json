@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "cowl (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "cowl (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
