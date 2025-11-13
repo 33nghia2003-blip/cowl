@@ -44,6 +44,10 @@
         "net9.0-windows10.0.19041": {
           "targetAlias": "net9.0-windows10.0.19041.0",
           "dependencies": {
+            "DocumentFormat.OpenXml": {
+              "target": "Package",
+              "version": "[3.3.0, )"
+            },
             "Microsoft.Web.WebView2": {
               "target": "Package",
               "version": "[1.*, )"

@@ -34,6 +34,13 @@
 - Xử lý nhiều format: colon-separated, tab-separated, multi-line
 - Độ chính xác: 85-99% tùy loại dữ liệu
 
+### 📄 Xuất file Word
+- **Export 2-column layout** - tối ưu không gian trang giấy
+- **Định dạng chuyên nghiệp** - tiêu đề, border, spacing
+- **Đầy đủ thông tin** - xuất toàn bộ dữ liệu từ cards
+- **Auto-naming** - `DanhSachCongTy_YYYYMMDD_HHmmss.docx`
+- **Keyboard shortcut** - Ctrl+E để xuất nhanh
+
 ### 📊 Hệ thống phân loại
 - **🟢 Có hẹn** - Doanh nghiệp đã xác nhận lịch hẹn (Green border)
 - **🟡 Đang cân nhắc** - Đang trong giai đoạn đánh giá (Yellow border)
@@ -62,6 +69,7 @@
 - **.NET 9.0** - Runtime với C# 13
 - **WinUI 3** - Modern UI framework
 - **Windows App SDK 1.6+** - Native APIs
+- **DocumentFormat.OpenXml 3.3.0** - Word export
 - **ARM64** platform
 
 ### Architecture
@@ -184,10 +192,9 @@ Auto-uncheck 2 checkbox còn lại, statistics tự động update
 - **Không cần** - Red border
 
 ### Keyboard Shortcuts
-- `Ctrl+N` - Focus Input
-- `Ctrl+S` - Submit
-- `Ctrl+D` - Clear All
-- `F1-F5` - Navigate pages
+- `Ctrl+E` - Export to Word
+- `Ctrl+Enter` - Add Company
+- `Ctrl+Delete` - Clear Input
 - `Alt+Arrow` - Toggle Navigation
 
 ---
@@ -223,6 +230,7 @@ this.SystemBackdrop = new DesktopAcrylicBackdrop(); // Alternative
 ## 🚧 Roadmap
 
 ### Version 2.0 (Planned)
+- [x] Export to Word (2-column layout)
 - [ ] SQLite database persistence
 - [ ] Export to Excel/CSV
 - [ ] Import from file

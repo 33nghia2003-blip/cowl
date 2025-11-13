@@ -8,6 +8,7 @@ namespace cowl
     public partial class App : Application
     {
         private MainWindow? m_window;
+        public static MainWindow? MainWindow { get; private set; }
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -26,6 +27,7 @@ namespace cowl
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             m_window = new MainWindow();
+            MainWindow = m_window;
             m_window.Activate();
         }
     }

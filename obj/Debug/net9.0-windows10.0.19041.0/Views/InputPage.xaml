@@ -44,7 +44,7 @@
             BorderThickness="1"
             CornerRadius="8">
             <Grid Padding="16">
-                <TextBox x:ConnectionId='5'
+                <TextBox x:ConnectionId='6'
                     x:Name="InputTextBox"
                     AcceptsReturn="True"
                     Header="Nội dung công ty"
@@ -62,6 +62,14 @@
             Orientation="Horizontal"
             Spacing="12">
             <Button x:ConnectionId='3'
+                                             
+                Content="Xuất file Word"
+                Style="{StaticResource DefaultButtonStyle}">
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="E" Modifiers="Control" />
+                </Button.KeyboardAccelerators>
+            </Button>
+            <Button x:ConnectionId='4'
                                       
                 Content="Xóa tất cả"
                 Style="{StaticResource DefaultButtonStyle}">
@@ -69,7 +77,7 @@
                     <KeyboardAccelerator Key="Delete" Modifiers="Control" />
                 </Button.KeyboardAccelerators>
             </Button>
-            <Button x:ConnectionId='4'
+            <Button x:ConnectionId='5'
                                         
                 Content="Thêm công ty"
                 Style="{StaticResource AccentButtonStyle}">

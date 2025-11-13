@@ -125,3 +125,7 @@ C:\Users\nghia\cowl\obj\Debug\net9.0-windows10.0.19041.0\MainWindow.g.i.cs
 C:\Users\nghia\cowl\obj\Debug\net9.0-windows10.0.19041.0\MainWindow.g.cs
 C:\Users\nghia\cowl\obj\Debug\net9.0-windows10.0.19041.0\MainWindow.xaml
 C:\Users\nghia\cowl\obj\Debug\net9.0-windows10.0.19041.0\MainWindow.xbf
+C:\Users\nghia\cowl\obj\Debug\net9.0-windows10.0.19041.0\cowl.sourcelink.json
+C:\Users\nghia\cowl\bin\Debug\net9.0-windows10.0.19041.0\DocumentFormat.OpenXml.dll
+C:\Users\nghia\cowl\bin\Debug\net9.0-windows10.0.19041.0\DocumentFormat.OpenXml.Framework.dll
+C:\Users\nghia\cowl\bin\Debug\net9.0-windows10.0.19041.0\System.IO.Packaging.dll

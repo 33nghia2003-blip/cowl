@@ -62,6 +62,14 @@
             Orientation="Horizontal"
             Spacing="12">
             <Button
+                Click="OnExportToWordClicked"
+                Content="Xuất file Word"
+                Style="{StaticResource DefaultButtonStyle}">
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="E" Modifiers="Control" />
+                </Button.KeyboardAccelerators>
+            </Button>
+            <Button
                 Click="OnClearClicked"
                 Content="Xóa tất cả"
                 Style="{StaticResource DefaultButtonStyle}">
