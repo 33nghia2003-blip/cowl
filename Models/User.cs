@@ -73,6 +73,12 @@ public class Company
     [BsonElement("noNeed")]
     public bool NoNeed { get; set; } = false;
 
+    [BsonElement("note")]
+    public string Note { get; set; } = string.Empty;
+
+    [BsonElement("appointmentDate")]
+    public DateTime? AppointmentDate { get; set; }
+
     [BsonElement("createdAt")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

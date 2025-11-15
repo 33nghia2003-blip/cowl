@@ -328,3 +328,8 @@ C:\Users\nghia\cowl\obj\ARM64\Debug\net9.0-windows10.0.19041.0\win-arm64\pri.res
 C:\Users\nghia\cowl\obj\ARM64\Debug\net9.0-windows10.0.19041.0\win-arm64\qualifiers.txt
 C:\Users\nghia\cowl\obj\ARM64\Debug\net9.0-windows10.0.19041.0\win-arm64\qualifiers.txt.intermediate
 C:\Users\nghia\cowl\obj\ARM64\Debug\net9.0-windows10.0.19041.0\win-arm64\MultipleQualifiersPerDimensionFound.txt
+C:\Users\nghia\cowl\bin\ARM64\Debug\net9.0-windows10.0.19041.0\win-arm64\Views\TimelinePage.xbf
+C:\Users\nghia\cowl\obj\ARM64\Debug\net9.0-windows10.0.19041.0\win-arm64\Views\TimelinePage.g.i.cs
+C:\Users\nghia\cowl\obj\ARM64\Debug\net9.0-windows10.0.19041.0\win-arm64\Views\TimelinePage.g.cs
+C:\Users\nghia\cowl\obj\ARM64\Debug\net9.0-windows10.0.19041.0\win-arm64\Views\TimelinePage.xaml
+C:\Users\nghia\cowl\obj\ARM64\Debug\net9.0-windows10.0.19041.0\win-arm64\Views\TimelinePage.xbf

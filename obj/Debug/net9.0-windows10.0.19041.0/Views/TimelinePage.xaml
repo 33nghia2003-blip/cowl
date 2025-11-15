@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Page
+    x:Class="cowl.Views.TimelinePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:cowl.Models"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+            <TextBlock
+                FontSize="28"
+                FontWeight="SemiBold"
+                Text="Lịch trình hẹn" />
+            <TextBlock
+                Margin="0,8,0,0"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="Xem tất cả các cuộc hẹn với công ty được sắp xếp theo từng ngày" />
+        </StackPanel>
+
+        <!-- Timeline Content -->
+        <ScrollViewer Grid.Row="1">
+            <StackPanel x:ConnectionId='2' x:Name="TimelinePanel" Spacing="16">
+                <!-- Companies will be loaded here -->
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
+

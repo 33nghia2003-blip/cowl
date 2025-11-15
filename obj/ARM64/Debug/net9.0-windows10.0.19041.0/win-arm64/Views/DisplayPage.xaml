@@ -27,7 +27,7 @@
                     Text="Hiển thị các thông tin đã được trích xuất từ trang nhập liệu" />
                 
                 <!-- Search Box -->
-                <AutoSuggestBox x:ConnectionId='15'
+                <AutoSuggestBox x:ConnectionId='18'
                     x:Name="SearchBox"
                     Margin="0,16,0,0"
                     PlaceholderText="Tìm kiếm theo tên công ty, người đại diện hoặc số điện thoại..."
@@ -67,7 +67,7 @@
                                     FontSize="24"
                                     Foreground="{ThemeResource AccentFillColorDefaultBrush}"
                                     Glyph="&#xE821;" />
-                                <TextBlock x:ConnectionId='18'
+                                <TextBlock x:ConnectionId='21'
                                     Grid.Column="1"
                                     FontSize="32"
                                     FontWeight="Bold"
@@ -102,7 +102,7 @@
                                     FontSize="24"
                                     Foreground="#10B981"
                                     Glyph="&#xE73E;" />
-                                <TextBlock x:ConnectionId='17'
+                                <TextBlock x:ConnectionId='20'
                                     Grid.Column="1"
                                     FontSize="32"
                                     FontWeight="Bold"
@@ -138,7 +138,7 @@
                                     FontSize="24"
                                     Foreground="#F59E0B"
                                     Glyph="&#xE7BA;" />
-                                <TextBlock x:ConnectionId='16'
+                                <TextBlock x:ConnectionId='19'
                                     Grid.Column="1"
                                     FontSize="32"
                                     FontWeight="Bold"
@@ -178,7 +178,7 @@
                                         FontWeight="SemiBold"
                                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                         Text="TÊN DOANH NGHIỆP" />
-                                    <TextBlock x:ConnectionId='14'
+                                    <TextBlock x:ConnectionId='17'
                                         FontSize="20"
                                         FontWeight="SemiBold"
                                                                                 
@@ -187,7 +187,7 @@
 
                                 <!-- Classification Checkboxes -->
                                 <StackPanel Grid.Column="1" Spacing="8" Orientation="Horizontal" VerticalAlignment="Center">
-                                    <CheckBox x:ConnectionId='11'
+                                    <CheckBox x:ConnectionId='14'
                                         Content="Có hẹn"
                                                                                         
                                         MinWidth="0">
@@ -196,7 +196,7 @@
                                             <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#10B981" />
                                         </CheckBox.Resources>
                                     </CheckBox>
-                                    <CheckBox x:ConnectionId='12'
+                                    <CheckBox x:ConnectionId='15'
                                         Content="Đang phân vân"
                                                                                        
                                         MinWidth="0">
@@ -205,7 +205,7 @@
                                             <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#F59E0B" />
                                         </CheckBox.Resources>
                                     </CheckBox>
-                                    <CheckBox x:ConnectionId='13'
+                                    <CheckBox x:ConnectionId='16'
                                         Content="Không có nhu cầu"
                                                                                 
                                         MinWidth="0">
@@ -242,7 +242,7 @@
                                     FontWeight="SemiBold"
                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                     Text="NGƯỜI ĐẠI DIỆN" />
-                                <TextBlock x:ConnectionId='10'
+                                <TextBlock x:ConnectionId='13'
                                     FontSize="18"
                                     FontWeight="SemiBold"
                                                                                    
@@ -281,7 +281,7 @@
                                         FontSize="16"
                                         Foreground="{ThemeResource AccentFillColorDefaultBrush}"
                                         Glyph="&#xE717;" />
-                                    <TextBlock x:ConnectionId='9'
+                                    <TextBlock x:ConnectionId='12'
                                         Grid.Column="1"
                                         FontSize="16"
                                                                                 
@@ -307,7 +307,7 @@
                                         FontSize="16"
                                         Foreground="{ThemeResource AccentFillColorDefaultBrush}"
                                         Glyph="&#xE9F3;" />
-                                    <TextBlock x:ConnectionId='8'
+                                    <TextBlock x:ConnectionId='11'
                                         Grid.Column="1"
                                         FontSize="16"
                                                                            
@@ -333,7 +333,7 @@
                                         FontSize="16"
                                         Foreground="{ThemeResource AccentFillColorDefaultBrush}"
                                         Glyph="&#xE707;" />
-                                    <TextBlock x:ConnectionId='7'
+                                    <TextBlock x:ConnectionId='10'
                                         Grid.Column="1"
                                         FontSize="16"
                                                                             
@@ -360,7 +360,7 @@
                                         FontSize="16"
                                         Foreground="{ThemeResource AccentFillColorDefaultBrush}"
                                         Glyph="&#xE7EE;" />
-                                    <TextBlock x:ConnectionId='6'
+                                    <TextBlock x:ConnectionId='9'
                                         Grid.Column="1"
                                         FontSize="16"
                                                                                    
@@ -387,7 +387,7 @@
                                         FontSize="16"
                                         Foreground="{ThemeResource AccentFillColorDefaultBrush}"
                                         Glyph="&#xE787;" />
-                                    <TextBlock x:ConnectionId='5'
+                                    <TextBlock x:ConnectionId='8'
                                         Grid.Column="1"
                                         FontSize="16"
                                                                                
@@ -395,6 +395,69 @@
                                 </Grid>
                             </StackPanel>
                         </Grid>
+
+                        <!-- Separator -->
+                        <Border
+                            Height="1"
+                            Margin="0,16,0,16"
+                            Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+                        <!-- Note and Appointment Section -->
+                        <StackPanel Spacing="16">
+                            <!-- Note -->
+                            <StackPanel Spacing="8">
+                                <TextBlock
+                                    FontSize="11"
+                                    FontWeight="SemiBold"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Text="GHI CHÚ KHÁCH HÀNG" />
+                                <TextBox x:ConnectionId='7'
+                                                                     
+                                    PlaceholderText="Nhập ghi chú về khách hàng..."
+                                    TextWrapping="Wrap"
+                                    AcceptsReturn="True"
+                                    MinHeight="80"
+                                    MaxHeight="150" />
+                            </StackPanel>
+
+                            <!-- Appointment Date and Time -->
+                            <Grid ColumnSpacing="16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                
+                                <!-- Date Picker -->
+                                <StackPanel Grid.Column="0" Spacing="8">
+                                    <TextBlock
+                                        FontSize="11"
+                                        FontWeight="SemiBold"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="NGÀY HẸN"
+                                        Margin="0,0,0,0" />
+                                    <CalendarDatePicker x:ConnectionId='6'
+                                                                                    
+                                        PlaceholderText="Chọn ngày..."
+                                        HorizontalAlignment="Stretch" />
+                                </StackPanel>
+                                
+                                <!-- Time Picker -->
+                                <StackPanel Grid.Column="1" Spacing="8">
+                                    <TextBlock
+                                        FontSize="11"
+                                        FontWeight="SemiBold"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="GIỜ HẸN"
+                                        Margin="0,0,0,0" />
+                                    <TimePicker x:ConnectionId='5'
+                                                                                    
+                                        ClockIdentifier="24HourClock"
+                                        MinuteIncrement="15"
+                                        HorizontalAlignment="Stretch"
+                                        Header="" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
 
                     </StackPanel>
                 </Border>

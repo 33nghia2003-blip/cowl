@@ -253,6 +253,92 @@
                                     </StackPanel>
                                 </Grid>
 
+                                <!-- Note and Appointment (Read-only) -->
+                                <Border
+                                    Height="1"
+                                    Margin="0,4,0,4"
+                                    Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+                                <StackPanel Spacing="12">
+                                    <!-- Note (Read-only) -->
+                                    <StackPanel Spacing="4">
+                                        <TextBlock
+                                            FontSize="11"
+                                            FontWeight="SemiBold"
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Text="GHI CHÚ" />
+                                        <TextBlock
+                                            FontSize="14"
+                                            Text="{x:Bind Note, Mode=OneWay}"
+                                            TextWrapping="Wrap"
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                    </StackPanel>
+
+                                    <!-- Appointment Date and Time (Read-only) -->
+                                    <Grid ColumnSpacing="16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Date -->
+                                        <StackPanel Grid.Column="0" Spacing="4">
+                                            <TextBlock
+                                                FontSize="11"
+                                                FontWeight="SemiBold"
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="NGÀY HẸN" />
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <FontIcon
+                                                    Grid.Column="0"
+                                                    Margin="0,0,8,0"
+                                                    FontSize="16"
+                                                    Foreground="#10B981"
+                                                    Glyph="&#xE787;" />
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    FontSize="16"
+                                                    FontWeight="SemiBold"
+                                                    Foreground="#10B981"
+                                                    Text="{x:Bind AppointmentDate, Mode=OneWay}"
+                                                    VerticalAlignment="Center" />
+                                            </Grid>
+                                        </StackPanel>
+
+                                        <!-- Time -->
+                                        <StackPanel Grid.Column="1" Spacing="4">
+                                            <TextBlock
+                                                FontSize="11"
+                                                FontWeight="SemiBold"
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="GIỜ HẸN" />
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <FontIcon
+                                                    Grid.Column="0"
+                                                    Margin="0,0,8,0"
+                                                    FontSize="16"
+                                                    Foreground="#10B981"
+                                                    Glyph="&#xE917;" />
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    FontSize="16"
+                                                    FontWeight="SemiBold"
+                                                    Foreground="#10B981"
+                                                    Text="{x:Bind AppointmentTime, Mode=OneWay}"
+                                                    VerticalAlignment="Center" />
+                                            </Grid>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+
                             </StackPanel>
                         </Border>
                     </DataTemplate>

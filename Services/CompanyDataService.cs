@@ -198,7 +198,9 @@ namespace cowl.Services
                 ActiveDate = info.ActiveDate,
                 HasAppointment = info.HasAppointment,
                 IsConsidering = info.IsConsidering,
-                NoNeed = info.NoNeed
+                NoNeed = info.NoNeed,
+                Note = info.Note,
+                AppointmentDate = info.AppointmentDate?.DateTime
             };
         }
 
@@ -216,7 +218,9 @@ namespace cowl.Services
                 ActiveDate = company.ActiveDate,
                 HasAppointment = company.HasAppointment,
                 IsConsidering = company.IsConsidering,
-                NoNeed = company.NoNeed
+                NoNeed = company.NoNeed,
+                Note = company.Note,
+                AppointmentDate = company.AppointmentDate.HasValue ? new DateTimeOffset(company.AppointmentDate.Value) : null
             };
 
             // Đăng ký sự kiện để tự động lưu khi có thay đổi
@@ -224,7 +228,9 @@ namespace cowl.Services
             {
                 if (e.PropertyName == nameof(Models.CompanyInfo.HasAppointment) ||
                     e.PropertyName == nameof(Models.CompanyInfo.IsConsidering) ||
-                    e.PropertyName == nameof(Models.CompanyInfo.NoNeed))
+                    e.PropertyName == nameof(Models.CompanyInfo.NoNeed) ||
+                    e.PropertyName == nameof(Models.CompanyInfo.Note) ||
+                    e.PropertyName == nameof(Models.CompanyInfo.AppointmentDate))
                 {
                     if (!string.IsNullOrEmpty(info.Id))
                     {
@@ -234,6 +240,31 @@ namespace cowl.Services
             };
 
             return info;
+        }
+
+        /// <summary>
+        /// Xóa tất cả công ty của user hiện tại
+        /// </summary>
+        public async Task<(bool success, string message)> DeleteAllCompaniesAsync()
+        {
+            try
+            {
+                var authService = AuthService.Instance;
+                if (authService.CurrentUser == null)
+                    return (false, "Bạn chưa đăng nhập!");
+
+                var filter = Builders<Company>.Filter.Eq(c => c.UserId, authService.CurrentUser.Id);
+                var result = await _companiesCollection.DeleteManyAsync(filter);
+                
+                // Xóa dữ liệu local
+                Companies.Clear();
+
+                return (true, $"Đã xóa {result.DeletedCount} công ty!");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Lỗi: {ex.Message}");
+            }
         }
 
         /// <summary>

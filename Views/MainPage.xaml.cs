@@ -49,6 +49,9 @@ namespace cowl.Views
                     case "Display":
                         ContentFrame.Navigate(typeof(DisplayPage));
                         break;
+                    case "Timeline":
+                        ContentFrame.Navigate(typeof(TimelinePage));
+                        break;
                     case "Appointment":
                         ContentFrame.Navigate(typeof(AppointmentPage));
                         break;

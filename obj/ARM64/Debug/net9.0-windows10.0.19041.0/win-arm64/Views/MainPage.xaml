@@ -42,11 +42,19 @@
                     <FontIcon Glyph="&#xE8F4;" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
+            <NavigationViewItem x:ConnectionId='5'
+                x:Name="TimelineNavItem"
+                Content="Xem theo ngày"
+                Tag="Timeline">
+                <NavigationViewItem.Icon>
+                    <FontIcon Glyph="&#xE787;" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
             
             <NavigationViewItemSeparator />
             <NavigationViewItemHeader Content="Phân loại" />
             
-            <NavigationViewItem x:ConnectionId='5'
+            <NavigationViewItem x:ConnectionId='6'
                 x:Name="AppointmentNavItem"
                 Content="Có hẹn"
                 Tag="Appointment">
@@ -54,7 +62,7 @@
                     <FontIcon Foreground="#10B981" Glyph="&#xE73E;" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
-            <NavigationViewItem x:ConnectionId='6'
+            <NavigationViewItem x:ConnectionId='7'
                 x:Name="ConsideringNavItem"
                 Content="Đang phân vân"
                 Tag="Considering">
@@ -62,7 +70,7 @@
                     <FontIcon Foreground="#F59E0B" Glyph="&#xE7C5;" />
                 </NavigationViewItem.Icon>
             </NavigationViewItem>
-            <NavigationViewItem x:ConnectionId='7'
+            <NavigationViewItem x:ConnectionId='8'
                 x:Name="NoNeedNavItem"
                 Content="Không có nhu cầu"
                 Tag="NoNeed">
@@ -79,18 +87,18 @@
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <PersonPicture Width="32" Height="32" />
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock x:ConnectionId='9'
+                            <TextBlock x:ConnectionId='10'
                                 x:Name="UserNameText"
                                 FontWeight="SemiBold"
                                 Text="User" />
-                            <TextBlock x:ConnectionId='10'
+                            <TextBlock x:ConnectionId='11'
                                 x:Name="UserEmailText"
                                 FontSize="11"
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                 Text="user@email.com" />
                         </StackPanel>
                     </StackPanel>
-                    <Button x:ConnectionId='8'
+                    <Button x:ConnectionId='9'
                         x:Name="LogoutButton"
                         HorizontalAlignment="Stretch"
                                                
@@ -105,7 +113,7 @@
             </StackPanel>
         </NavigationView.PaneFooter>
 
-        <Frame x:ConnectionId='11' x:Name="ContentFrame" />
+        <Frame x:ConnectionId='12' x:Name="ContentFrame" />
     </NavigationView>
 </Page>
 

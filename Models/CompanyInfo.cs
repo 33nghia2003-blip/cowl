@@ -19,6 +19,8 @@ namespace cowl.Models
         private bool _hasAppointment = false;
         private bool _isConsidering = false;
         private bool _noNeed = false;
+        private string _note = string.Empty;
+        private DateTimeOffset? _appointmentDate = null;
 
         public string Id
         {
@@ -177,6 +179,51 @@ namespace cowl.Models
                         HasAppointment = false;
                         IsConsidering = false;
                     }
+                }
+            }
+        }
+
+        public string Note
+        {
+            get => _note;
+            set
+            {
+                if (_note != value)
+                {
+                    _note = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public DateTimeOffset? AppointmentDate
+        {
+            get => _appointmentDate;
+            set
+            {
+                if (_appointmentDate != value)
+                {
+                    _appointmentDate = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(AppointmentTime));
+                }
+            }
+        }
+
+        public TimeSpan AppointmentTime
+        {
+            get => _appointmentDate?.TimeOfDay ?? new TimeSpan(9, 0, 0);
+            set
+            {
+                if (_appointmentDate.HasValue)
+                {
+                    var newDate = _appointmentDate.Value.Date.Add(value);
+                    AppointmentDate = newDate;
+                }
+                else
+                {
+                    // Nếu chưa có ngày, set ngày hôm nay
+                    AppointmentDate = DateTimeOffset.Now.Date.Add(value);
                 }
             }
         }

@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using System.Text.RegularExpressions;
 using System;
 using System.Linq;
@@ -8,6 +9,7 @@ using Windows.Storage.Pickers;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using XamlStyle = Microsoft.UI.Xaml.Style;
 
 namespace cowl.Views
 {
@@ -37,6 +39,40 @@ namespace cowl.Views
             // Xử lý text đã dán để trích xuất thông tin
             ProcessCompanyData(InputTextBox.Text, newCompany);
             
+            // Kiểm tra trùng lặp tên công ty
+            var existingCompany = DataService.Companies.FirstOrDefault(c => 
+                c.CompanyName.Equals(newCompany.CompanyName, StringComparison.OrdinalIgnoreCase));
+            
+            if (existingCompany != null)
+            {
+                // Hiển thị popup xác nhận
+                ContentDialog duplicateDialog = new ContentDialog
+                {
+                    Title = "Công ty đã tồn tại",
+                    Content = $"Công ty \"{newCompany.CompanyName}\" đã có trong cơ sở dữ liệu.\n\nBạn có muốn thêm công ty trùng tên này không?",
+                    PrimaryButtonText = "Thêm mới",
+                    SecondaryButtonText = "Xem công ty cũ",
+                    CloseButtonText = "Hủy",
+                    DefaultButton = ContentDialogButton.Close,
+                    XamlRoot = this.XamlRoot
+                };
+
+                var result = await duplicateDialog.ShowAsync();
+                
+                if (result == ContentDialogResult.Secondary)
+                {
+                    // Người dùng muốn xem công ty cũ - chuyển sang DisplayPage
+                    ShowInfoBar("Đã hủy thêm công ty mới. Vui lòng kiểm tra danh sách công ty.", InfoBarSeverity.Informational);
+                    return;
+                }
+                else if (result != ContentDialogResult.Primary)
+                {
+                    // Người dùng chọn Hủy
+                    return;
+                }
+                // Nếu chọn "Thêm mới" thì tiếp tục thêm bên dưới
+            }
+            
             // Lưu lên MongoDB
             var (success, message) = await DataService.AddCompanyAsync(newCompany);
             
@@ -54,14 +90,99 @@ namespace cowl.Views
 
         private void ProcessCompanyData(string input, Models.CompanyInfo company)
         {
+            // Chuẩn hóa input - thay xuống dòng bằng khoảng trắng
+            var normalizedInput = input.Replace("\r", " ").Replace("\n", " ").Trim();
+            
+            // Nếu có nhiều dòng riêng biệt, xử lý theo dòng
             var lines = input.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            var isSingleLine = lines.Length <= 2; // Nếu <= 2 dòng thì coi như single line
+            
+            if (isSingleLine)
+            {
+                // Xử lý định dạng single line
+                ProcessSingleLineFormat(normalizedInput, company);
+            }
+            else
+            {
+                // Xử lý định dạng multi-line
+                ProcessMultiLineFormat(lines, company);
+            }
+        }
 
+        private void ProcessSingleLineFormat(string input, Models.CompanyInfo company)
+        {
+            // Bỏ ký tự đặc biệt ở đầu
+            input = Regex.Replace(input, @"^[^\w\sÀ-ỹ]+", "").Trim();
+            
+            // Tìm tên công ty - phần đầu tiên trước từ khóa (bỏ qua "Tên viết tắt" nếu có)
+            var companyNameMatch = Regex.Match(input, 
+                @"^(.+?)(?=\s*(?:☷|Tên viết tắt|Mã số thuế|Địa chỉ thuế|Địa chỉ|Đại diện pháp luật|Đại diện|Điện thoại|Ngày cấp|Ngày hoạt động|Trạng thái))", 
+                RegexOptions.IgnoreCase);
+            
+            if (companyNameMatch.Success)
+            {
+                company.CompanyName = companyNameMatch.Groups[1].Value.Trim();
+            }
+            
+            // Tìm Đại diện pháp luật
+            var representativeMatch = Regex.Match(input, 
+                @"Đại\s+diện\s+pháp\s+luật:\s*(.+?)(?=\s+Điện\s+thoại|\s+Ngày|\s+Trạng\s+thái|$)", 
+                RegexOptions.IgnoreCase);
+            
+            if (representativeMatch.Success)
+            {
+                company.RepresentativeName = representativeMatch.Groups[1].Value.Trim();
+            }
+            
+            // Tìm Điện thoại
+            var phoneMatch = Regex.Match(input, 
+                @"Điện\s+thoại:\s*([\d\s\+\-\.]+?)(?=\s+(?:Email|Ngày|Trạng\s+thái|Mã\s+số|$))", 
+                RegexOptions.IgnoreCase);
+            
+            if (phoneMatch.Success)
+            {
+                company.PhoneNumber = phoneMatch.Groups[1].Value.Trim();
+            }
+            
+            // Tìm Địa chỉ thuế hoặc Địa chỉ
+            var addressMatch = Regex.Match(input, 
+                @"Địa\s+chỉ(?:\s+thuế)?:\s*(.+?)(?=\s+(?:Đại\s+diện|Điện\s+thoại|Ngày|Trạng\s+thái|Mã\s+số|$))", 
+                RegexOptions.IgnoreCase);
+            
+            if (addressMatch.Success)
+            {
+                company.Address = addressMatch.Groups[1].Value.Trim();
+            }
+            
+            // Tìm Trạng thái
+            var statusMatch = Regex.Match(input, 
+                @"Trạng thái:\s*(.+?)(?=\s*$)", 
+                RegexOptions.IgnoreCase);
+            
+            if (statusMatch.Success)
+            {
+                company.Status = statusMatch.Groups[1].Value.Trim();
+            }
+            
+            // Tìm Ngày cấp hoặc Ngày hoạt động
+            var dateMatch = Regex.Match(input, 
+                @"Ngày\s+(?:cấp|hoạt động):\s*(\d{1,2}/\d{1,2}/\d{4})", 
+                RegexOptions.IgnoreCase);
+            
+            if (dateMatch.Success)
+            {
+                company.ActiveDate = dateMatch.Groups[1].Value.Trim();
+            }
+        }
+
+        private void ProcessMultiLineFormat(string[] lines, Models.CompanyInfo company)
+        {
             // Tìm tên công ty - dòng đầu tiên thường là tên
             if (lines.Length > 0)
             {
                 var firstLine = lines[0].Trim();
                 // Bỏ các ký tự đặc biệt ở đầu nếu có
-                firstLine = System.Text.RegularExpressions.Regex.Replace(firstLine, @"^[^\w\s-]+", "").Trim();
+                firstLine = Regex.Replace(firstLine, @"^[^\w\s-]+", "").Trim();
                 company.CompanyName = firstLine;
             }
 
@@ -70,21 +191,33 @@ namespace cowl.Views
                 var trimmedLine = lines[i].Trim();
                 var lowerLine = trimmedLine.ToLower();
 
-                // Tìm người đại diện
-                if (lowerLine.Contains("người đại diện"))
+                // Tìm người đại diện (hỗ trợ cả "Đại diện pháp luật")
+                if (lowerLine.Contains("người đại diện") || lowerLine.Contains("đại diện pháp luật"))
                 {
                     var name = ExtractValueAfterLabel(trimmedLine);
                     
-                    // Nếu có tên ngay sau label, lấy phần trước "Ngoài ra" nếu có
+                    // Nếu có tên ngay sau label, lấy phần trước từ khóa tiếp theo
                     if (!string.IsNullOrWhiteSpace(name))
                     {
-                        // Tìm phần tên chính (viết hoa) trước "Ngoài ra"
-                        var match = System.Text.RegularExpressions.Regex.Match(name, 
-                            @"^([A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ\s]+)");
+                        // Tìm phần tên chính trước từ khóa tiếp theo (Điện thoại, Ngày, Trạng thái, v.v.)
+                        var match = Regex.Match(name, 
+                            @"^(.+?)(?=\s*(?:Điện thoại|Ngày|Trạng thái|Mã số|$))", 
+                            RegexOptions.IgnoreCase);
                         
                         if (match.Success)
                         {
                             name = match.Groups[1].Value.Trim();
+                        }
+                        else
+                        {
+                            // Nếu không match, thử lấy phần tên viết hoa
+                            match = Regex.Match(name, 
+                                @"^([A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ\s]+)");
+                            
+                            if (match.Success)
+                            {
+                                name = match.Groups[1].Value.Trim();
+                            }
                         }
                     }
                     
@@ -93,18 +226,54 @@ namespace cowl.Views
                 // Tìm số điện thoại
                 else if (lowerLine.Contains("điện thoại") || lowerLine.Contains("phone"))
                 {
-                    company.PhoneNumber = ExtractPhoneNumber(trimmedLine);
+                    var phoneNumber = ExtractPhoneNumber(trimmedLine);
+                    
+                    // Nếu số điện thoại có chứa từ khóa khác ở cuối, cắt bỏ
+                    var phoneMatch = Regex.Match(phoneNumber, 
+                        @"^([\d\s\+\-\.]+)(?=\s*(?:Ngày|Trạng thái|Mã số|$))", 
+                        RegexOptions.IgnoreCase);
+                    
+                    if (phoneMatch.Success)
+                    {
+                        phoneNumber = phoneMatch.Groups[1].Value.Trim();
+                    }
+                    
+                    company.PhoneNumber = phoneNumber;
                 }
-                // Tìm địa chỉ - chỉ lấy địa chỉ chính (không lấy địa chỉ thuế)
-                else if (lowerLine.Contains("địa chỉ") && !lowerLine.Contains("thuế"))
+                // Tìm địa chỉ (hỗ trợ cả "Địa chỉ thuế")
+                else if (lowerLine.Contains("địa chỉ"))
                 {
                     var address = ExtractValueAfterLabel(trimmedLine);
-                    company.Address = address;
+                    
+                    // Lấy phần địa chỉ trước từ khóa tiếp theo
+                    var addressMatch = Regex.Match(address, 
+                        @"^(.+?)(?=\s*(?:Đại diện|Điện thoại|Mã số|Ngày|Trạng thái|$))", 
+                        RegexOptions.IgnoreCase);
+                    
+                    if (addressMatch.Success)
+                    {
+                        address = addressMatch.Groups[1].Value.Trim();
+                    }
+                    
+                    // Nếu chưa có địa chỉ hoặc đây là "địa chỉ thuế" và chưa có địa chỉ chính
+                    if (string.IsNullOrEmpty(company.Address))
+                    {
+                        company.Address = address;
+                    }
                 }
-                // Tìm tình trạng
-                else if (lowerLine.Contains("tình trạng") || lowerLine.Contains("status"))
+                // Tìm trạng thái (hỗ trợ cả "Trạng thái" và "Tình trạng")
+                else if (lowerLine.Contains("trạng thái") || lowerLine.Contains("tình trạng") || lowerLine.Contains("status"))
                 {
-                    company.Status = ExtractValueAfterLabel(trimmedLine);
+                    var status = ExtractValueAfterLabel(trimmedLine);
+                    
+                    // Lấy phần trạng thái (thường là 2-3 từ)
+                    var statusMatch = Regex.Match(status, @"^([\w\s]+)", RegexOptions.IgnoreCase);
+                    if (statusMatch.Success)
+                    {
+                        status = statusMatch.Groups[1].Value.Trim();
+                    }
+                    
+                    company.Status = status;
                 }
                 // Tìm ngành nghề chính
                 else if (lowerLine.Contains("ngành nghề chính") || lowerLine.Contains("business"))
@@ -121,10 +290,19 @@ namespace cowl.Views
                     }
                     company.BusinessSector = sector;
                 }
-                // Tìm ngày hoạt động
-                else if (lowerLine.Contains("ngày hoạt động") || lowerLine.Contains("active date"))
+                // Tìm ngày hoạt động hoặc ngày cấp
+                else if (lowerLine.Contains("ngày hoạt động") || lowerLine.Contains("ngày cấp") || lowerLine.Contains("active date"))
                 {
-                    company.ActiveDate = ExtractValueAfterLabel(trimmedLine);
+                    var date = ExtractValueAfterLabel(trimmedLine);
+                    
+                    // Lấy phần ngày tháng (format dd/mm/yyyy)
+                    var dateMatch = Regex.Match(date, @"(\d{1,2}/\d{1,2}/\d{4})");
+                    if (dateMatch.Success)
+                    {
+                        date = dateMatch.Groups[1].Value;
+                    }
+                    
+                    company.ActiveDate = date;
                 }
             }
         }
@@ -164,12 +342,42 @@ namespace cowl.Views
             return ExtractValue(line);
         }
 
-        private void OnClearClicked(object sender, RoutedEventArgs e)
+        private async void OnClearClicked(object sender, RoutedEventArgs e)
         {
-            InputTextBox.Text = string.Empty;
-            DataService.Companies.Clear();
+            // Hiển thị popup xác nhận
+            ContentDialog confirmDialog = new ContentDialog
+            {
+                Title = "Xác nhận xóa tất cả",
+                Content = "Bạn có chắc chắn muốn xóa TẤT CẢ dữ liệu?\n\nHành động này sẽ xóa vĩnh viễn tất cả công ty khỏi cơ sở dữ liệu và KHÔNG THỂ KHÔI PHỤC.",
+                PrimaryButtonText = "Xóa tất cả",
+                CloseButtonText = "Hủy",
+                DefaultButton = ContentDialogButton.Close,
+                XamlRoot = this.XamlRoot
+            };
+
+            // Đặt màu đỏ cho nút xóa
+            confirmDialog.PrimaryButtonStyle = new XamlStyle(typeof(Button));
+            confirmDialog.PrimaryButtonStyle.Setters.Add(new Setter(Button.BackgroundProperty, new SolidColorBrush(Windows.UI.Color.FromArgb(255, 239, 68, 68))));
+
+            var result = await confirmDialog.ShowAsync();
             
-            ShowInfoBar("Đã xóa tất cả dữ liệu", InfoBarSeverity.Informational);
+            if (result == ContentDialogResult.Primary)
+            {
+                // Xóa tất cả dữ liệu trên cloud
+                var (success, message) = await DataService.DeleteAllCompaniesAsync();
+                
+                if (success)
+                {
+                    // Xóa ô input
+                    InputTextBox.Text = string.Empty;
+                    
+                    ShowInfoBar("Đã xóa tất cả dữ liệu thành công", InfoBarSeverity.Success);
+                }
+                else
+                {
+                    ShowInfoBar($"Lỗi khi xóa dữ liệu: {message}", InfoBarSeverity.Error);
+                }
+            }
         }
 
         private async void OnExportToWordClicked(object sender, RoutedEventArgs e)

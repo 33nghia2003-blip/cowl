@@ -396,6 +396,69 @@
                             </StackPanel>
                         </Grid>
 
+                        <!-- Separator -->
+                        <Border
+                            Height="1"
+                            Margin="0,16,0,16"
+                            Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+                        <!-- Note and Appointment Section -->
+                        <StackPanel Spacing="16">
+                            <!-- Note -->
+                            <StackPanel Spacing="8">
+                                <TextBlock
+                                    FontSize="11"
+                                    FontWeight="SemiBold"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Text="GHI CHÚ KHÁCH HÀNG" />
+                                <TextBox
+                                    Text="{x:Bind Note, Mode=TwoWay}"
+                                    PlaceholderText="Nhập ghi chú về khách hàng..."
+                                    TextWrapping="Wrap"
+                                    AcceptsReturn="True"
+                                    MinHeight="80"
+                                    MaxHeight="150" />
+                            </StackPanel>
+
+                            <!-- Appointment Date and Time -->
+                            <Grid ColumnSpacing="16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                
+                                <!-- Date Picker -->
+                                <StackPanel Grid.Column="0" Spacing="8">
+                                    <TextBlock
+                                        FontSize="11"
+                                        FontWeight="SemiBold"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="NGÀY HẸN"
+                                        Margin="0,0,0,0" />
+                                    <CalendarDatePicker
+                                        Date="{x:Bind AppointmentDate, Mode=TwoWay}"
+                                        PlaceholderText="Chọn ngày..."
+                                        HorizontalAlignment="Stretch" />
+                                </StackPanel>
+                                
+                                <!-- Time Picker -->
+                                <StackPanel Grid.Column="1" Spacing="8">
+                                    <TextBlock
+                                        FontSize="11"
+                                        FontWeight="SemiBold"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="GIỜ HẸN"
+                                        Margin="0,0,0,0" />
+                                    <TimePicker
+                                        Time="{x:Bind AppointmentTime, Mode=TwoWay}"
+                                        ClockIdentifier="24HourClock"
+                                        MinuteIncrement="1"
+                                        HorizontalAlignment="Stretch"
+                                        Header="" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+
                     </StackPanel>
                 </Border>
             </DataTemplate>

@@ -154,3 +154,8 @@ C:\Users\nghia\cowl\obj\Debug\net9.0-windows10.0.19041.0\Views\LoginPage.xaml
 C:\Users\nghia\cowl\obj\Debug\net9.0-windows10.0.19041.0\Views\RegisterPage.xaml
 C:\Users\nghia\cowl\obj\Debug\net9.0-windows10.0.19041.0\Views\LoginPage.xbf
 C:\Users\nghia\cowl\obj\Debug\net9.0-windows10.0.19041.0\Views\RegisterPage.xbf
+C:\Users\nghia\cowl\bin\Debug\net9.0-windows10.0.19041.0\Views\TimelinePage.xbf
+C:\Users\nghia\cowl\obj\Debug\net9.0-windows10.0.19041.0\Views\TimelinePage.g.i.cs
+C:\Users\nghia\cowl\obj\Debug\net9.0-windows10.0.19041.0\Views\TimelinePage.g.cs
+C:\Users\nghia\cowl\obj\Debug\net9.0-windows10.0.19041.0\Views\TimelinePage.xaml
+C:\Users\nghia\cowl\obj\Debug\net9.0-windows10.0.19041.0\Views\TimelinePage.xbf
