@@ -13,6 +13,8 @@ namespace cowl.Views
 
         public ObservableCollection<Models.CompanyInfo> Companies => DataService.Companies;
 
+        public ObservableCollection<Models.CompanyInfo> FilteredCompanies { get; } = new ObservableCollection<Models.CompanyInfo>();
+
         public int TotalCompanies => DataService.Companies.Count;
         
         public int ClassifiedCompanies => DataService.Companies.Count(c => 
@@ -21,14 +23,20 @@ namespace cowl.Views
         public int UnclassifiedCompanies => DataService.Companies.Count(c => 
             !c.HasAppointment && !c.IsConsidering && !c.NoNeed);
 
+        private string _searchText = string.Empty;
+
         public DisplayPage()
         {
             this.InitializeComponent();
+            
+            // Load initial data
+            LoadFilteredCompanies();
             
             // Lắng nghe thay đổi để cập nhật thống kê
             DataService.Companies.CollectionChanged += (s, e) =>
             {
                 UpdateStatistics();
+                LoadFilteredCompanies();
             };
             
             // Lắng nghe thay đổi phân loại
@@ -43,6 +51,37 @@ namespace cowl.Views
                         UpdateStatistics();
                     }
                 };
+            }
+        }
+
+        private void OnSearchTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            {
+                _searchText = sender.Text;
+                LoadFilteredCompanies();
+            }
+        }
+
+        private void LoadFilteredCompanies()
+        {
+            FilteredCompanies.Clear();
+
+            var query = DataService.Companies.AsEnumerable();
+
+            // Apply search filter
+            if (!string.IsNullOrWhiteSpace(_searchText))
+            {
+                var searchLower = _searchText.ToLower();
+                query = query.Where(c =>
+                    c.CompanyName.ToLower().Contains(searchLower) ||
+                    c.RepresentativeName.ToLower().Contains(searchLower) ||
+                    c.PhoneNumber.Contains(searchLower));
+            }
+
+            foreach (var company in query)
+            {
+                FilteredCompanies.Add(company);
             }
         }
 

@@ -1,7 +1,10 @@
 App.xbf
+MainWindow.xbf
 Views\AppointmentPage.xbf
 Views\ConsideringPage.xbf
 Views\DisplayPage.xbf
 Views\InputPage.xbf
+Views\LoginPage.xbf
 Views\MainPage.xbf
 Views\NoNeedPage.xbf
+Views\RegisterPage.xbf

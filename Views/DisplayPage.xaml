@@ -26,6 +26,14 @@
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                     Text="Hiển thị các thông tin đã được trích xuất từ trang nhập liệu" />
                 
+                <!-- Search Box -->
+                <AutoSuggestBox
+                    x:Name="SearchBox"
+                    Margin="0,16,0,0"
+                    PlaceholderText="Tìm kiếm theo tên công ty, người đại diện hoặc số điện thoại..."
+                    QueryIcon="Find"
+                    TextChanged="OnSearchTextChanged" />
+                
                 <!-- Statistics -->
                 <Grid Margin="0,16,0,0" ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
@@ -144,7 +152,7 @@
             </StackPanel>
 
             <!-- Company List -->
-            <ItemsControl Grid.Row="1" ItemsSource="{x:Bind Companies, Mode=OneWay}">
+            <ItemsControl Grid.Row="1" ItemsSource="{x:Bind FilteredCompanies, Mode=OneWay}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="local:CompanyInfo">
                         <Border

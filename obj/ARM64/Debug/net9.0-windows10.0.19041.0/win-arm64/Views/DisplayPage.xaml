@@ -26,6 +26,14 @@
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                     Text="Hiển thị các thông tin đã được trích xuất từ trang nhập liệu" />
                 
+                <!-- Search Box -->
+                <AutoSuggestBox x:ConnectionId='15'
+                    x:Name="SearchBox"
+                    Margin="0,16,0,0"
+                    PlaceholderText="Tìm kiếm theo tên công ty, người đại diện hoặc số điện thoại..."
+                    QueryIcon="Find"
+                                                      />
+                
                 <!-- Statistics -->
                 <Grid Margin="0,16,0,0" ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
@@ -59,7 +67,7 @@
                                     FontSize="24"
                                     Foreground="{ThemeResource AccentFillColorDefaultBrush}"
                                     Glyph="&#xE821;" />
-                                <TextBlock x:ConnectionId='17'
+                                <TextBlock x:ConnectionId='18'
                                     Grid.Column="1"
                                     FontSize="32"
                                     FontWeight="Bold"
@@ -94,7 +102,7 @@
                                     FontSize="24"
                                     Foreground="#10B981"
                                     Glyph="&#xE73E;" />
-                                <TextBlock x:ConnectionId='16'
+                                <TextBlock x:ConnectionId='17'
                                     Grid.Column="1"
                                     FontSize="32"
                                     FontWeight="Bold"
@@ -130,7 +138,7 @@
                                     FontSize="24"
                                     Foreground="#F59E0B"
                                     Glyph="&#xE7BA;" />
-                                <TextBlock x:ConnectionId='15'
+                                <TextBlock x:ConnectionId='16'
                                     Grid.Column="1"
                                     FontSize="32"
                                     FontWeight="Bold"
@@ -144,7 +152,7 @@
             </StackPanel>
 
             <!-- Company List -->
-            <ItemsControl x:ConnectionId='2' Grid.Row="1"                                              >
+            <ItemsControl x:ConnectionId='2' Grid.Row="1"                                                      >
                 <ItemsControl.ItemTemplate>
                     <DataTemplate                               >
                         <Border x:ConnectionId='4'
