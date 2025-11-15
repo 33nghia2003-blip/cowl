@@ -16,6 +16,15 @@
         PaneDisplayMode="Left"
                                                    >
 
+        <NavigationView.PaneHeader>
+            <StackPanel Margin="16,8" Spacing="8">
+                <TextBlock
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Text="Cowl" />
+            </StackPanel>
+        </NavigationView.PaneHeader>
+
         <NavigationView.MenuItems>
             <NavigationViewItem x:ConnectionId='3'
                 x:Name="InputNavItem"
@@ -63,7 +72,40 @@
             </NavigationViewItem>
         </NavigationView.MenuItems>
 
-        <Frame x:ConnectionId='8' x:Name="ContentFrame" />
+        <NavigationView.PaneFooter>
+            <StackPanel>
+                <NavigationViewItemSeparator />
+                <StackPanel Margin="16,8" Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <PersonPicture Width="32" Height="32" />
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock x:ConnectionId='9'
+                                x:Name="UserNameText"
+                                FontWeight="SemiBold"
+                                Text="User" />
+                            <TextBlock x:ConnectionId='10'
+                                x:Name="UserEmailText"
+                                FontSize="11"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="user@email.com" />
+                        </StackPanel>
+                    </StackPanel>
+                    <Button x:ConnectionId='8'
+                        x:Name="LogoutButton"
+                        HorizontalAlignment="Stretch"
+                                               
+                        Content="Đăng xuất">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+                                <Setter Property="Background" Value="Transparent" />
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </NavigationView.PaneFooter>
+
+        <Frame x:ConnectionId='11' x:Name="ContentFrame" />
     </NavigationView>
 </Page>
 

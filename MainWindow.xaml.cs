@@ -2,6 +2,7 @@ using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using cowl.Services;
 
 namespace cowl
 {
@@ -34,8 +35,18 @@ namespace cowl
             size.Height = 960;
             this.AppWindow.Resize(size);
             
-            // Navigate to MainPage
-            ContentFrame.Navigate(typeof(Views.MainPage));
+            // Check if user is logged in
+            var authService = AuthService.Instance;
+            if (authService.CurrentUser == null)
+            {
+                // Navigate to Login page if not logged in
+                ContentFrame.Navigate(typeof(Views.LoginPage));
+            }
+            else
+            {
+                // Navigate to MainPage if logged in
+                ContentFrame.Navigate(typeof(Views.MainPage));
+            }
         }
 
         private void AppTitleBar_PaneToggleRequested(TitleBar sender, object args)

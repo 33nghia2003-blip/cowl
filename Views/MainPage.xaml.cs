@@ -1,5 +1,7 @@
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using cowl.Services;
 
 namespace cowl.Views
 {
@@ -12,9 +14,25 @@ namespace cowl.Views
         {
             this.InitializeComponent();
             
+            // Load user info
+            LoadUserInfo();
+            
             // Chọn trang mặc định là InputPage
             NavView.SelectedItem = InputNavItem;
             ContentFrame.Navigate(typeof(InputPage));
+        }
+
+        private async void LoadUserInfo()
+        {
+            var authService = AuthService.Instance;
+            if (authService.CurrentUser != null)
+            {
+                UserNameText.Text = authService.CurrentUser.FullName;
+                UserEmailText.Text = authService.CurrentUser.Email;
+                
+                // Load dữ liệu công ty của user
+                await CompanyDataService.Instance.LoadCompaniesForCurrentUserAsync();
+            }
         }
 
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -47,6 +65,16 @@ namespace cowl.Views
         public void ToggleNavigationPane()
         {
             NavView.IsPaneOpen = !NavView.IsPaneOpen;
+        }
+
+        private void OnLogoutClicked(object sender, RoutedEventArgs e)
+        {
+            // Logout user
+            var authService = AuthService.Instance;
+            authService.Logout();
+
+            // Navigate to Login page - use the Page's Frame
+            this.Frame.Navigate(typeof(LoginPage));
         }
     }
 }

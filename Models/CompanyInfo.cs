@@ -8,6 +8,7 @@ namespace cowl.Models
     /// </summary>
     public class CompanyInfo : INotifyPropertyChanged
     {
+        private string _id = string.Empty;
         private string _companyName = string.Empty;
         private string _representativeName = string.Empty;
         private string _phoneNumber = string.Empty;
@@ -18,6 +19,19 @@ namespace cowl.Models
         private bool _hasAppointment = false;
         private bool _isConsidering = false;
         private bool _noNeed = false;
+
+        public string Id
+        {
+            get => _id;
+            set
+            {
+                if (_id != value)
+                {
+                    _id = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public string CompanyName
         {

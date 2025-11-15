@@ -23,7 +23,7 @@ namespace cowl.Views
             this.InitializeComponent();
         }
 
-        private void OnProcessClicked(object sender, RoutedEventArgs e)
+        private async void OnProcessClicked(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(InputTextBox.Text))
             {
@@ -37,13 +37,19 @@ namespace cowl.Views
             // Xử lý text đã dán để trích xuất thông tin
             ProcessCompanyData(InputTextBox.Text, newCompany);
             
-            // Thêm vào đầu danh sách (index 0) để hiển thị trên cùng
-            DataService.Companies.Insert(0, newCompany);
+            // Lưu lên MongoDB
+            var (success, message) = await DataService.AddCompanyAsync(newCompany);
             
-            // Xóa ô input để chuẩn bị cho lần nhập tiếp theo
-            InputTextBox.Text = string.Empty;
-            
-            ShowInfoBar($"Đã thêm công ty thành công! Tổng số: {DataService.Companies.Count} công ty", InfoBarSeverity.Success);
+            if (success)
+            {
+                // Xóa ô input để chuẩn bị cho lần nhập tiếp theo
+                InputTextBox.Text = string.Empty;
+                ShowInfoBar($"Đã thêm công ty thành công! Tổng số: {DataService.Companies.Count} công ty", InfoBarSeverity.Success);
+            }
+            else
+            {
+                ShowInfoBar($"Lỗi khi lưu: {message}", InfoBarSeverity.Error);
+            }
         }
 
         private void ProcessCompanyData(string input, Models.CompanyInfo company)

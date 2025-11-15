@@ -23,6 +23,8 @@
 - 📊 **Phân loại 3 cấp độ** (Có hẹn / Đang cân nhắc / Không cần)
 - 📈 **Thống kê real-time** với dashboard trực quan
 - 🎨 **Giao diện Windows 11** với Mica backdrop
+- 🔐 **Hệ thống đăng nhập/đăng ký** với MongoDB
+- ☁️ **Đồng bộ cloud** - dữ liệu riêng biệt cho từng user
 
 ---
 
@@ -48,11 +50,20 @@
 - Mutual exclusion logic - chỉ 1 trạng thái active
 - Auto-sync real-time across all pages
 
+### 🔐 Authentication & Security
+- **Đăng ký/Đăng nhập** - Form validation đầy đủ
+- **Password strength indicator** - Real-time feedback
+- **BCrypt hashing** - Mã hóa mật khẩu an toàn (cost factor 11)
+- **User isolation** - Mỗi user có dữ liệu riêng biệt
+- **MongoDB Atlas** - Cloud database với replica set
+- **Auto-save** - Tự động đồng bộ mọi thay đổi
+
 ### 📈 Dashboard & Analytics
 - 3 KPI: **Tổng số công ty** | **Đã phân loại** | **Chưa phân loại**
 - Live updates với ObservableCollection
 - Newest-first ordering
 - Filtered views cho từng category
+- **User profile** - Hiển thị tên và email người dùng
 
 ### 🎨 Modern UI/UX
 - **Mica backdrop** với transparency effect (Windows 11)
@@ -70,6 +81,8 @@
 - **WinUI 3** - Modern UI framework
 - **Windows App SDK 1.6+** - Native APIs
 - **DocumentFormat.OpenXml 3.3.0** - Word export
+- **MongoDB.Driver 2.28.0** - Cloud database
+- **BCrypt.Net-Next 4.0.3** - Password hashing
 - **ARM64** platform
 
 ### Architecture
@@ -92,12 +105,16 @@
 ```
 cowl/
 ├── Models/
-│   └── CompanyInfo.cs              # Entity với INotifyPropertyChanged
+│   ├── CompanyInfo.cs              # Entity với INotifyPropertyChanged
+│   └── User.cs                     # User & Company models cho MongoDB
 ├── Services/
-│   └── CompanyDataService.cs       # Singleton service
+│   ├── CompanyDataService.cs       # Singleton service + MongoDB sync
+│   └── AuthService.cs              # Authentication với MongoDB
 ├── Converters/
 │   └── EmptyStringToVisibilityConverter.cs
 ├── Views/
+│   ├── LoginPage.xaml/.cs          # Đăng nhập
+│   ├── RegisterPage.xaml/.cs       # Đăng ký
 │   ├── InputPage.xaml/.cs          # Data entry + regex parsing
 │   ├── DisplayPage.xaml/.cs        # Dashboard + statistics
 │   ├── AppointmentPage             # Filtered: HasAppointment
@@ -159,11 +176,26 @@ dotnet publish -c Release -r win-x86 --self-contained true
 ## 📖 Hướng dẫn sử dụng
 
 ### Quick Start
-1. Chạy ứng dụng: `dotnet run`
-2. Click **"Nhập dữ liệu"** → paste văn bản công ty → **"Thêm công ty"**
-3. Xem kết quả tại **"Hiển thị"**
+1. **Đăng ký tài khoản**: Tạo tài khoản mới với username, email, mật khẩu
+2. **Đăng nhập**: Sử dụng username/email và mật khẩu để đăng nhập
+3. **Nhập dữ liệu**: Click **"Nhập liệu"** → paste văn bản công ty → **"Thêm công ty"**
+4. **Xem kết quả**: Tại **"Hiển thị"** - dữ liệu tự động đồng bộ lên MongoDB
 
 ### Workflow cơ bản
+
+#### 0. Đăng ký & Đăng nhập
+**Đăng ký:**
+- Nhập họ tên, username (tối thiểu 3 ký tự)
+- Email hợp lệ (kiểm tra format và uniqueness)
+- Mật khẩu (tối thiểu 6 ký tự) với strength indicator
+- Xác nhận mật khẩu khớp
+- Đồng ý điều khoản dịch vụ
+
+**Đăng nhập:**
+- Username hoặc Email
+- Mật khẩu
+- Tùy chọn: Ghi nhớ đăng nhập
+- Dữ liệu tự động load từ MongoDB
 
 #### 1. Nhập dữ liệu
 Paste văn bản có format:
@@ -229,15 +261,23 @@ this.SystemBackdrop = new DesktopAcrylicBackdrop(); // Alternative
 
 ## 🚧 Roadmap
 
-### Version 2.0 (Planned)
+### Version 2.0 (Completed) ✅
 - [x] Export to Word (2-column layout)
-- [ ] SQLite database persistence
+- [x] MongoDB database persistence
+- [x] User authentication system
+- [x] Cloud sync per user
+- [x] Password hashing with BCrypt
+- [x] Auto-save on changes
+
+### Version 2.1 (In Progress)
+- [ ] Edit/Delete companies
 - [ ] Export to Excel/CSV
 - [ ] Import from file
 - [ ] Full-text search
-- [ ] Edit/Delete companies
 - [ ] Undo/Redo
 - [ ] Backup & Restore
+- [ ] Change password
+- [ ] Forgot password via email
 
 ### Version 3.0 (Future)
 - [ ] AI-powered classification
@@ -284,12 +324,49 @@ Xem chi tiết tại [LICENSE](LICENSE)
 
 ```
 Language:      C# 13.0
-Lines of Code: ~2,500
-Files:         15
+Lines of Code: ~4,000
+Files:         22
 Target:        Windows 10.0.19041.0+
-Platform:      ARM64
-Version:       1.0.0
+Platform:      ARM64, x64, x86
+Version:       2.0.0
 Released:      November 2025
+Database:      MongoDB Atlas
+```
+
+## 🔌 Database Schema
+
+### Users Collection
+```json
+{
+  "_id": ObjectId,
+  "username": String (unique),
+  "email": String (unique),
+  "passwordHash": String (BCrypt),
+  "fullName": String,
+  "createdAt": DateTime,
+  "lastLogin": DateTime,
+  "isActive": Boolean
+}
+```
+
+### Companies Collection
+```json
+{
+  "_id": ObjectId,
+  "userId": ObjectId (indexed),
+  "companyName": String,
+  "representativeName": String,
+  "phoneNumber": String,
+  "address": String,
+  "status": String,
+  "businessSector": String,
+  "activeDate": String,
+  "hasAppointment": Boolean,
+  "isConsidering": Boolean,
+  "noNeed": Boolean,
+  "createdAt": DateTime,
+  "updatedAt": DateTime
+}
 ```
 
 ---

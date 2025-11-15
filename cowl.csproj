@@ -40,6 +40,8 @@
         <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.*" />
         <PackageReference Include="Microsoft.Web.WebView2" Version="1.*" />
         <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.*" />
+        <PackageReference Include="MongoDB.Driver" Version="2.28.0" />
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
 
         <Manifest Include="$(ApplicationManifest)" />
     </ItemGroup>
